@@ -6,18 +6,16 @@ It integrates **CI/CD**, **security scanning**, **monitoring**, and **GitOps** f
 ---
 
 ## 🗂️ Table of Contents
-- [Project Overview](#-project-overview)
-- [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Pipeline Workflow](#-pipeline-workflow)
-- [Key Features](#-key-features)
-- [Prerequisites](#-prerequisites)
-- [Setup Instructions](#️-setup-instructions)
-- [Repository Structure](#-repository-structure)
-- [Monitoring & Security](#-monitoring--security)
-- [Future Improvements](#-future-improvements)
-- [Screenshots](#-screenshots)
-- [License](#-license)
+- [Project Overview]
+- [Architecture]
+- [Tech Stack]
+- [Pipeline Workflow])
+- [Key Features]
+- [Prerequisites]
+- [Setup Instructions]
+- [Repository Structure]
+- [Monitoring & Security]
+- [Future Improvements]
 
 ---
 
@@ -109,6 +107,93 @@ The goal is to showcase a **real-world enterprise DevSecOps workflow** where cod
 ## ⚙️ Setup Instructions
 
 ### 1️⃣ Clone the Repository
-```bash
+
 git clone https://github.com/marioaaziz/three-tier-devsecops-project.git
 cd three-tier-devsecops-project
+
+2️⃣ Configure AWS
+
+Create EKS cluster
+
+Configure kubectl to connect to EKS
+
+Setup RDS MySQL for backend
+
+Create ECR repository for Docker images
+
+3️⃣ Setup Jenkins
+
+Install plugins:
+
+Git, Docker, SonarQube, Dependency-Check, Trivy
+
+Add Credentials:
+
+AWS keys, ECR repo name, GitHub credentials
+
+Create a new pipeline job using the included Jenkinsfile
+
+4️⃣ Install Monitoring Stack
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
+
+5️⃣ Deploy ArgoCD
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+6️⃣ Run the Pipeline
+
+Trigger build from Jenkins or via webhook
+
+Monitor progress in Jenkins → Console Output
+
+Verify deployment using the LoadBalancer URL of the service.
+
+📂 Repository Structure
+three-tier-devsecops-project/
+├── app-code/
+│   ├── frontend/            # React frontend
+│   ├── backend/             # Flask backend
+│   └── Dockerfile
+├── k8s-manifests/           # Kubernetes YAML files
+├── scripts/                 # Helper scripts
+├── Jenkinsfile              # CI/CD pipeline
+├── README.md
+└── architecture.png
+
+📈 Monitoring & Security
+
+Grafana Dashboards: for Kubernetes and app performance
+
+Prometheus: for metrics and alerting
+
+SonarQube: enforces code quality gates
+
+Trivy: scans containers & files for vulnerabilities
+
+OWASP Dependency-Check: scans app dependencies for CVEs
+
+🔮 Future Improvements
+
+Automate all AWS infrastructure with Terraform
+
+Add Slack/MS Teams notifications to pipeline
+
+Secure Grafana & ArgoCD with HTTPS
+
+Add Canary deployments using Argo Rollouts
+
+📷 Screenshots
+
+(Add screenshots after running your pipeline)
+
+✅ Jenkins pipeline stages
+
+✅ SonarQube code quality dashboard
+
+✅ Trivy vulnerability scan results
+
+✅ Grafana metrics dashboard
+
+✅ ArgoCD GitOps sync view
